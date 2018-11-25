@@ -8,9 +8,27 @@ import { TasksModule } from './tasks/tasks.module'
 @Module({
   imports: [
     TasksModule,
-    TypeOrmModule.forRoot()
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'postgres',
+      database: 'todo',
+      synchronize: true,
+      logging: false,
+      entities: [
+        __dirname + '/**/*.entity.{ts,js}'
+      ],
+      migrations: [
+        __dirname + '/**/*.migration.{ts,js}'
+      ],
+      subscribers: [
+        __dirname + '/**/*.subscriber.{ts,js}'
+      ]
+    })
   ],
   controllers: [AppController],
   providers: [AppService]
 })
-export class AppModule {}
+export class AppModule { }
