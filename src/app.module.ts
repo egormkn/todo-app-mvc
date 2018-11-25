@@ -1,20 +1,19 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import * as dotenv from 'dotenv'
 import * as path from 'path'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { TasksModule } from './tasks/tasks.module'
+
+dotenv.config()
 
 @Module({
   imports: [
     TasksModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'todo',
+      url: process.env.DATABASE_URL,
       synchronize: true,
       logging: false,
       entities: [
