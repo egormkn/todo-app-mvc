@@ -1,0 +1,210 @@
+{% extends "layouts/base.html" %}
+
+{% import "layouts/modal.html" as modal %}
+
+{% block content %}
+<style type="text/css">
+.hide-buttons button {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+}
+.hide-buttons:hover button {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
+</style>
+
+<div class="container mb-3" style="margin-top: 80px;">
+    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addListModal">Add list</button>
+    
+    <div class="card-columns">
+        {% for list in lists %}
+        <div class="card bg-light list" data-id="{{ list.id }}" data-title="{{ list.title }}">
+            <div class="card-header d-flex align-items-center hide-buttons">
+                <div class="flex-grow-1">{{ list.title }}</div>
+                <button type="button" class="btn btn-outline-primary btn-sm ml-1" data-toggle="modal" data-target="#updateListModal"><i class="fas fa-pen"></i></button>
+                <button type="button" class="btn btn-outline-danger btn-sm ml-1" data-toggle="modal" data-target="#deleteListModal"><i class="fas fa-trash"></i></button>
+            </div>
+            
+            <ul class="list-group list-group-flush">
+                {% for task in list.tasks %}
+                <li class="list-group-item d-flex align-items-center task hide-buttons" data-id="{{ task.id }}" data-title="{{ task.title }}" data-description="{{ task.description }}">
+                    <div class="custom-control custom-checkbox flex-grow-1">
+                        <input type="checkbox" class="custom-control-input task-checkbox" id="task{{ list.id }}_{{ task.id }}" data-check="{% if task.isDone %}" checked="{% endif %}">
+                        <label class="custom-control-label" for="task{{ list.id }}_{{ task.id }}">{{ task.title }}</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-sm ml-1" data-toggle="modal" data-target="#updateTaskModal"><i class="fas fa-pen"></i></button>
+                    <button type="button" class="btn btn-outline-danger btn-sm ml-1" data-toggle="modal" data-target="#deleteTaskModal"><i class="fas fa-trash"></i></button>
+                </li>
+                {% else %}
+                <li class="list-group-item disabled">No tasks...</li>
+                {% endfor %}
+            </ul>
+            
+            <div class="card-footer text-muted">
+                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addTaskModal">Add task</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-header">
+                No task lists
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% call modal.form('addTask', 'Add task', 'Add') %}
+<form method="POST" action="/tasks/task/add" id="addTaskForm" class="needs-validation">
+    <div class="form-group">
+        <label for="title" class="col-form-label">Title:</label>
+        <input class="form-control" name="title" type="text" required>
+    </div>
+    <div class="form-group">
+        <label for="description" class="col-form-label">Description:</label>
+        <textarea class="form-control" name="description"></textarea>
+    </div>
+    <input type="hidden" name="list" value="-1">
+</form>
+{% endcall %}
+
+{% call modal.form('updateTask', 'Update task', 'Save') %}
+<form method="POST" action="/tasks/task/update" id="updateTaskForm" class="needs-validation">
+    <div class="form-group">
+        <label for="title" class="col-form-label">Title:</label>
+        <input class="form-control" name="title" type="text" required>
+    </div>
+    <div class="form-group">
+        <label for="description" class="col-form-label">Description:</label>
+        <textarea class="form-control" name="description"></textarea>
+    </div>
+    <input type="hidden" name="id" value="-1">
+    <input type="hidden" name="isDone" value="false">
+</form>
+{% endcall %}
+
+{% call modal.form('deleteTask', 'Delete task', 'Delete') %}
+<form method="POST" action="/tasks/task/delete" id="deleteTaskForm" class="needs-validation">
+    <div class="form-group">
+        <label for="title" class="col-form-label">Title:</label>
+        <input class="form-control" name="title" type="text" disabled>
+    </div>
+    <div class="form-group">
+        <label for="description" class="col-form-label">Description:</label>
+        <textarea class="form-control" name="description" disabled></textarea>
+    </div>
+    <input type="hidden" name="id" value="-1">
+</form>
+{% endcall %}
+
+{% call modal.form('addList', 'Add task list', 'Add') %}
+<form method="POST" action="/tasks/list/add" id="addListForm" class="needs-validation">
+    <div class="form-group">
+        <label for="title" class="col-form-label">Title:</label>
+        <input class="form-control" name="title" type="text" required>
+    </div>
+</form>
+{% endcall %}
+
+{% call modal.form('deleteList', 'Delete task list', 'Delete') %}
+<form method="POST" action="/tasks/list/delete" id="deleteListForm" class="needs-validation">
+    <div class="form-group">
+        <label for="title" class="col-form-label">Title:</label>
+        <input class="form-control" name="title" type="text" disabled>
+    </div>
+    <input type="hidden" name="id" value="-1">
+</form>
+{% endcall %}
+
+{% call modal.form('updateList', 'Update task list', 'Save') %}
+<form method="POST" action="/tasks/list/add" id="addListForm" class="needs-validation">
+    <div class="form-group">
+        <label for="title" class="col-form-label">Title:</label>
+        <input class="form-control" name="title" type="text" required>
+    </div>
+    <input type="hidden" name="id" value="-1">
+</form>
+{% endcall %}
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(function () {
+        $('#addTaskModal').on('show.bs.modal', function (event) {
+            var list = $(event.relatedTarget).closest('.list')
+            $(this).find('input[name="list"]').val(list.data('id'))
+        })
+
+        $('#deleteTaskModal').on('show.bs.modal', function (event) {
+            var task = $(event.relatedTarget).closest('.task')
+            $(this).find('input[name="id"]').val(task.data('id'))
+            $(this).find('input[name="title"]').val(task.data('title'))
+            $(this).find('input[name="description"]').val(task.data('description'))
+        })
+
+        $('#updateTaskModal').on('show.bs.modal', function (event) {
+            var task = $(event.relatedTarget).closest('.task')
+            $(this).find('input[name="id"]').val(task.data('id'))
+            $(this).find('input[name="title"]').val(task.data('title'))
+            $(this).find('input[name="description"]').val(task.data('description'))
+            $(this).find('input[name="isDone"]').val(task.find('.task-checkbox').prop('checked'))
+        })
+
+        $('#deleteListModal').on('show.bs.modal', function (event) {
+            var list = $(event.relatedTarget).closest('.list')
+            $(this).find('input[name="id"]').val(list.data('id'))
+            $(this).find('input[name="title"]').val(list.data('title'))
+        })
+
+        $('#updateListModal').on('show.bs.modal', function (event) {
+            var list = $(event.relatedTarget).closest('.list')
+            $(this).find('input[name="id"]').val(list.data('id'))
+            $(this).find('input[name="title"]').val(list.data('title'))
+        })
+
+        $('.task-checkbox').change(function () {
+            var checkbox = $(this)
+            var isChecked = $(this).prop('checked')
+            var task = $(this).closest('.task')
+            $.ajax({
+                type: 'POST',
+                url: '/tasks/task/update',
+                data: {
+                    id: task.data('id'),
+                    title: task.data('title'),
+                    description: task.data('description'),
+                    isDone: isChecked
+                },
+                success: function(data) {
+                    console.log('OK: ' + isChecked)
+                },
+                error: function(data) {
+                    alert(data);
+                    checkbox.prop('checked', !isChecked)
+                }
+            });
+        });
+    })
+    
+
+    /*// Example starter JavaScript for disabling form submissions if there are invalid fields
+    window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);*/
+</script>
+{% endblock %}
