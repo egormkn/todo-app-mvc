@@ -58,7 +58,7 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node"
   }
 }
