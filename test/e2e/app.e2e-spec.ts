@@ -37,6 +37,7 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication(server, {})
 
+    // FIXME: Do we really need to copy setup code from main.ts?
     app.setViewEngine('html')
     app.useStaticAssets(path.join(__dirname, '..', 'public'))
     app.setBaseViewsDir(path.join(__dirname, '..', 'views'))

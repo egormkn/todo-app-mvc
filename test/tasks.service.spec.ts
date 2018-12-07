@@ -3,45 +3,26 @@ import { getRepositoryToken } from '@nestjs/typeorm'
 import { List } from '../src/tasks/entities/list.entity'
 import { Task } from '../src/tasks/entities/task.entity'
 import { TasksService } from '../src/tasks/tasks.service'
+import { mockListRepository } from './mocks/list.repository'
+import { mockTaskRepository } from './mocks/task.repository'
 
 describe('TasksService', () => {
-  let service: TasksService
-
-  const mockTask = new Task()
-
-  const mockTaskRepository = {
-    find: async () => [mockTask],
-    findOne: async () => mockTask,
-    save: async () => mockTask
-  }
-
-  const mockList = new List()
-
-  const mockListRepository = {
-    find: async () => [mockList],
-    findOne: async () => mockList,
-    save: async () => mockList
-  }
+  let tasksService: TasksService
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        TasksService,
-        {
-          provide: getRepositoryToken(Task),
-          useValue: mockTaskRepository
-        },
-        {
-          provide: getRepositoryToken(List),
-          useValue: mockListRepository
-        }
-      ]
-    }).compile()
+      providers: [TasksService]
+    })
+    .overrideProvider(getRepositoryToken(Task))
+    .useValue(mockTaskRepository)
+    .overrideProvider(getRepositoryToken(List))
+    .useValue(mockListRepository)
+    .compile()
 
-    service = module.get<TasksService>(TasksService)
+    tasksService = module.get<TasksService>(TasksService)
   })
 
   it('should be defined', () => {
-    expect(service).toBeDefined()
+    expect(tasksService).toBeDefined()
   })
 })
