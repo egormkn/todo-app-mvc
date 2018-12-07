@@ -2,22 +2,25 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { AppController } from '../src/app.controller'
 import { AppService } from '../src/app.service'
 
-// https://docs.nestjs.com/fundamentals/unit-testing
-
 describe('AppController', () => {
-  let app: TestingModule
+  let appController: AppController
+  let appService: AppService
 
-  beforeAll(async () => {
-    app = await Test.createTestingModule({
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
       providers: [AppService]
     }).compile()
+
+    appService = module.get<AppService>(AppService)
+    appController = module.get<AppController>(AppController)
   })
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      const appController = app.get<AppController>(AppController)
-      expect(appController.index()).toBe('Hello World!')
+  describe('index', () => {
+    it('should return string', async () => {
+      jest.spyOn(appService, 'index').mockImplementation(() => 'test')
+
+      expect(appController.index()).toEqual({ index: 'test' })
     })
   })
 })
