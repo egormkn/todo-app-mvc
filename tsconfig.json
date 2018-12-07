@@ -16,7 +16,10 @@
     "strictBindCallApply": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "target": "ES6"
+    "target": "ES6",
+    "plugins": [
+      { "name": "typescript-tslint-plugin" }
+    ]
   },
   "include": [
     "src/**/*"
