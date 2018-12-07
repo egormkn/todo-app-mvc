@@ -5,6 +5,7 @@
   "author": "Egor Makarenko",
   "license": "MIT",
   "scripts": {
+    "postinstall": "npm run build",
     "build": "tsc",
     "clean": "rimraf dist",
     "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
@@ -12,12 +13,11 @@
     "start:debug": "nodemon --config nodemon-debug.json",
     "start:prod": "node -r dotenv/config dist/main.js",
     "start:optimized": "node --optimize_for_size --max_old_space_size=460 --gc_interval=100 -r dotenv/config dist/main.js",
-    "postinstall": "npm run build",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:e2e": "jest --config test/e2e/jest-e2e.json"
+    "codecov": "codecov"
   },
   "dependencies": {
     "@nestjs/common": "^5.4.1",
@@ -43,7 +43,8 @@
     "@types/node": "^10.12.11",
     "@types/nunjucks": "^3.1.0",
     "@types/supertest": "^2.0.5",
-    "jest": "^23.5.0",
+    "codecov": "^3.1.0",
+    "jest": "^23.6.0",
     "nodemon": "^1.18.7",
     "supertest": "^3.1.0",
     "ts-jest": "^23.10.5",
@@ -56,16 +57,7 @@
     "typescript-tslint-plugin": "^0.1.2"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "test",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
+    "preset": "ts-jest",
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
