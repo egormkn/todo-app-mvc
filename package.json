@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "npm run build",
     "build": "tsc -p tsconfig.build.json",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist && rimraf coverage",
     "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
@@ -59,8 +59,11 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "coverageDirectory": "coverage",
-    "rootDir": "src",
+    "coverageDirectory": "./coverage",
+    "roots": [
+      "./src/", 
+      "./tests/"
+    ],
     "testEnvironment": "node"
   }
 }

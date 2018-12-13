@@ -12,10 +12,5 @@
     "space-before-function-paren": false,
     "arrow-parens": false
   },
-  "rulesDirectory": [],
-  "linterOptions": {
-    "exclude": [
-      "node_modules/**"
-    ]
-  }
+  "rulesDirectory": []
 }
