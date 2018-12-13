@@ -1,10 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { List } from '../src/tasks/entities/list.entity'
-import { Task } from '../src/tasks/entities/task.entity'
-import { TasksService } from '../src/tasks/tasks.service'
-import { mockListRepository } from './mocks/list.repository'
-import { mockTaskRepository } from './mocks/task.repository'
+import { List } from './entities/list.entity'
+import { Task } from './entities/task.entity'
+import { TasksService } from './tasks.service'
+
+const mockList = new List()
+
+export const mockListRepository = {
+  find: async () => [mockList],
+  findOne: async () => mockList,
+  save: async () => mockList
+}
+
+const mockTask = new Task()
+
+export const mockTaskRepository = {
+  find: async () => [mockTask],
+  findOne: async () => mockTask,
+  save: async () => mockTask
+}
 
 describe('TasksService', () => {
   let tasksService: TasksService

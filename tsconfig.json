@@ -18,14 +18,12 @@
     "strictFunctionTypes": true,
     "target": "ES6",
     "plugins": [
-      { "name": "typescript-tslint-plugin" }
+      {
+        "name": "typescript-tslint-plugin"
+      }
     ]
   },
-  "include": [
-    "src/**/*"
-  ],
   "exclude": [
-    "node_modules",
-    "test/**/*"
+    "node_modules"
   ]
 }

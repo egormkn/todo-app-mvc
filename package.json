@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "npm run build",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist",
     "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
     "start:dev": "nodemon",
@@ -16,6 +16,7 @@
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:cov": "jest --coverage",
     "codecov": "codecov"
   },
@@ -58,7 +59,8 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "coverageDirectory": "./coverage",
+    "coverageDirectory": "coverage",
+    "rootDir": "src",
     "testEnvironment": "node"
   }
 }

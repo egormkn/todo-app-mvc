@@ -7,11 +7,25 @@ import * as nunjucks from 'nunjucks'
 import * as path from 'path'
 import * as request from 'supertest'
 import { Connection } from 'typeorm'
-import { AppModule } from '../../src/app.module'
-import { List } from '../../src/tasks/entities/list.entity'
-import { Task } from '../../src/tasks/entities/task.entity'
-import { mockListRepository } from '../mocks/list.repository'
-import { mockTaskRepository } from '../mocks/task.repository'
+import { AppModule } from '../src/app.module'
+import { List } from '../src/tasks/entities/list.entity'
+import { Task } from '../src/tasks/entities/task.entity'
+
+const mockList = new List()
+
+export const mockListRepository = {
+  find: async () => [mockList],
+  findOne: async () => mockList,
+  save: async () => mockList
+}
+
+const mockTask = new Task()
+
+export const mockTaskRepository = {
+  find: async () => [mockTask],
+  findOne: async () => mockTask,
+  save: async () => mockTask
+}
 
 describe('AppController (e2e)', () => {
   let app: INestApplication & INestExpressApplication
