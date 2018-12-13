@@ -1,16 +1,21 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended",
-        "tslint-config-standard"
-    ],
-    "jsRules": {
-        "no-unused-expression": true
-    },
-    "rules": {
-        "object-literal-sort-keys": false,
-        "space-before-function-paren": false,
-        "arrow-parens": false
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-standard"
+  ],
+  "jsRules": {
+    "no-unused-expression": true
+  },
+  "rules": {
+    "object-literal-sort-keys": false,
+    "space-before-function-paren": false,
+    "arrow-parens": false
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**"
+    ]
+  }
 }
