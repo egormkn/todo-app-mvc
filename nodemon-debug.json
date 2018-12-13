@@ -3,5 +3,8 @@
     "src"
   ],
   "ext": "ts",
+  "ignore": [
+    "src/**/*.spec.ts"
+  ],
   "exec": "node --inspect -r ts-node/register -r tsconfig-paths/register -r dotenv/config src/main.ts"
 }
